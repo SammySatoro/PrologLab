@@ -99,3 +99,12 @@ minOddDown(X, C, Min):-
 	minOddDown(X1, D1, Min);
 	X2 is X div 10,
 	minOddDown(X2, C, Min).
+%lw_11_19
+fibUp(1, 1).
+fibUp(2, 1).
+fibUp(N, X):- 
+	N1 is N - 1,
+	N2 is N - 2,
+	fibUp(N1, X1),
+	fibUp(N2, X2),
+	X is X1 + X2.
