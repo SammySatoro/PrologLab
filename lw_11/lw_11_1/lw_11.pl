@@ -108,3 +108,10 @@ fibUp(N, X):-
 	fibUp(N1, X1),
 	fibUp(N2, X2),
 	X is X1 + X2.
+%lw_11_20   
+fibDown(N, X):- fibDown(1, 1, 2, N, X).
+fibDown(_, Fib ,N, N, Fib):-!.
+fibDown(F1, F2, K, N, X):- 
+	F3 is F1 + F2, 
+	K1 is K + 1,
+	fibDown(F2, F3, K1, N, X).
