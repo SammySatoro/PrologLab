@@ -80,4 +80,10 @@ maxDown(X, C, Max):-
 	maxDown(X1, D1, Max);
 	X2 is X div 10,
 	maxDown(X2, C, Max).
-
+%lw_11_17  
+minOddUp(X, X):- X < 100, X >= 0,!.
+minOddUp(X, M):- 
+	X1 is X div 10,
+	D2 is X mod 10,
+	minOddUp(X1, D1),
+	(D2 < D1, D2 mod 2 =\= 0 -> M is D2; M is D1). 
