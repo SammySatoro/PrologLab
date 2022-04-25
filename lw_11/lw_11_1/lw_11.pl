@@ -55,3 +55,10 @@ son(X):- parent(X,Y), man(Y), write(Y), nl, fail.
 %lw_11_12
 husband(X,Y):- man(X), parent(X,Z), parent(Y,Z).
 husband(X):- husband(Y,X), man(Y), woman(X), write(Y), nl, !.
+%lw_11_13
+grandson(X,Y):- man(X), parent(Y,Z), parent(Z,X).
+grandsons(X):- grandson(Y,X), write(Y), nl, fail.
+%lw_11_14
+grandpa_and_da(X,Y):- 
+	man(X), woman(Y), parent(X,Z), parent(Z,Y) | 
+	man(Y), woman(X), parent(Y,Z), parent(Z,X).
