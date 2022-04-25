@@ -62,3 +62,22 @@ grandsons(X):- grandson(Y,X), write(Y), nl, fail.
 grandpa_and_da(X,Y):- 
 	man(X), woman(Y), parent(X,Z), parent(Z,Y) | 
 	man(Y), woman(X), parent(Y,Z), parent(Z,X).
+%lw_11_15
+maxUp(X, X):- X < 10, !.
+maxUp(X, Max):-
+   X1 is X div 10,
+   X2 is X mod 10,
+   maxUp(X1, Max1),
+   (X2 < Max1,  Max is Max1; Max is X2).
+%lw_11_16   
+maxDown(X, Max):- maxDown(X, 0, Max).
+maxDown(0, Max, Max):- !.
+maxDown(X, C, Max):-
+	X1 is X div 10,
+	D1 is X mod 10,
+	D1 > C, 
+	!,	
+	maxDown(X1, D1, Max);
+	X2 is X div 10,
+	maxDown(X2, C, Max).
+
