@@ -87,3 +87,15 @@ minOddUp(X, M):-
 	D2 is X mod 10,
 	minOddUp(X1, D1),
 	(D2 < D1, D2 mod 2 =\= 0 -> M is D2; M is D1). 
+%lw_11_18
+minOddDown(X, Min):- minOddDown(X, 9, Min).
+minOddDown(0, Min, Min):- !.
+minOddDown(X, C, Min):-
+	X1 is X div 10,
+	D1 is X mod 10,
+	D1 mod 2 =\= 0,
+	D1 < C, 
+	! -> 	
+	minOddDown(X1, D1, Min);
+	X2 is X div 10,
+	minOddDown(X2, C, Min).
