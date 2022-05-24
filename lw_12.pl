@@ -52,3 +52,17 @@ countDivsDown(N, Div, Counter, Count):-
 	countDivsDown(N, NextDiv, NextCounter, Count),!;
 	NextDiv is Div + 1,
 	countDivsDown(N, NextDiv, Counter, Count),!.
+	
+% 12 Найти сумму всех делителей числа, взаимно простых с суммой цифр числа и не взаимно простых с произведением цифр числа.
+
+sumOfDivs(N, Sum):- sumOfDivs(N, 0, 0, Sum).
+sumOfDivs(N, N, Sum, Sum):-!.
+sumOfDivs(N, Div, Summutor, Sum):-
+	NextDiv is Div + 1,
+	NextSummutor is Summutor + NextDiv,
+	0 is N mod NextDiv,
+	sumOfDigits(N, S), mutuallyPrime(NextDiv, S), 
+	productOfDigits(N, P), \+mutuallyPrime(NextDiv, P),
+	sumOfDivs(N, NextDiv, NextSummutor, Sum), !;
+	NextDiv is Div + 1,
+	sumOfDivs(N, NextDiv, Summutor, Sum), !.
