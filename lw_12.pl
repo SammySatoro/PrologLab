@@ -107,8 +107,8 @@ sumOfSumsOfPows(N, Summator, Sum):-
 	sumOfSumsOfPows(NextN, Summator, Sum),!.
 
 % 14 Построить предикат, получающий длину списка.
-listLength([], 0).
-listLength([Head|Tail], Length):- listLength(Tail, NextLength), Length is NextLength + 1.
+listLength([], 0):- !.
+listLength([_|Tail], Length):- listLength(Tail, NextLength), Length is NextLength + 1, !.
 
 /*
 1.5
