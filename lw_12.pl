@@ -86,7 +86,6 @@ myPow(N, P, Res):-
 	myPow(N, NextP, NextRes),
 	Res is NextRes * N.
 
-
 isSumOfPows(N):- isSumOfPows(N, N, 0).	
 isSumOfPows(N, 0, Sum):- N is Sum, !.
 isSumOfPows(N, N2, Sum):-
