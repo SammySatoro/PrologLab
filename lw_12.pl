@@ -106,6 +106,10 @@ sumOfSumsOfPows(N, Summator, Sum):-
 	NextN is N - 1,
 	sumOfSumsOfPows(NextN, Summator, Sum),!.
 
+% 14 Построить предикат, получающий длину списка.
+listLength([], 0).
+listLength([Head|Tail], Length):- listLength(Tail, NextLength), Length is NextLength + 1.
+
 /*
 1.5
 Дан целочисленный массив и натуральный индекс (число, меньшее
