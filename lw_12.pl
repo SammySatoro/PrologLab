@@ -1,3 +1,14 @@
+gcd(A, B, X):-
+	A1 is A mod B,
+	B1 is B mod A,
+	(
+		A1 == 0, !, X is B;
+		B1 == 0, !, X is A;
+		A > B, !, gcd(A1, B, X);
+		gcd(A, B1, X)
+	).	
+mutuallyPrime(X, Y):- 1 is gcd(X, Y).
+
 % 11 Найти количество делителей числа, не делящихся на 3
 
 countDivsUp(N, N, 0):-!.
