@@ -201,7 +201,7 @@ reverseList([Head|Tail], Buffer, Reversed):-
 	
 reverseSegment(List, Processed):- 
 	lowerBound(List, Lower), upperBound(List, Upper),
-	reverseSegment(List, [], [], Lower, Upper, 0, Processed).
+	reverseSegment(List, [], [], Lower, Upper, 0, Processed),!.
 reverseSegment([H|[]], [H]):-!.	
 reverseSegment([H1,H2|[]], [H1,H2]):-!.	
 reverseSegment(List, [], [], Lower, Upper, 0, List):- Lower is Upper - 1,!.	
