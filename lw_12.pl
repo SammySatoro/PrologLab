@@ -132,3 +132,93 @@ isGlobalMin(List,[Head|_], 0):- min(List, Head), !.
 isGlobalMin(List, [_|Tail], Index):-
 	NextIndex is Index - 1,
 	isGlobalMin(List, Tail, NextIndex).
+	
+/* 16 Дан целочисленный массив. Необходимо переставить в обратном
+порядке элементы массива, расположенные между его минимальным и
+максимальным элементами.
+
+Отче наш, Иже еси на небесех!
+Да святится имя Твое,
+да приидет Царствие Твое,
+да будет воля Твоя,
+яко на небеси и на земли.
+Хлеб наш насущный даждь нам днесь;
+и остави нам долги наша,
+якоже и мы оставляем должником нашим;
+и не введи нас во искушение,
+но избави нас от лукаваго.
+Ибо Твое есть Царство и сила и слава во веки.
+Аминь.
+*/
+
+appendList([], List2, List2).
+appendList([Head|Tail], List2, [Head|TailResult]):-
+   appendList(Tail, List2, TailResult).
+
+maxItemIndex([Head|Tail], Index):- maxItemIndex([Head|Tail], Head, 0, 0, Index).
+maxItemIndex([], _, _, Index, Index).
+maxItemIndex([Head|Tail], Max, Index, MaxIndex, Res):-
+	NextIndex is Index + 1,
+	Max =< Head, NextMax is Head, NextMaxIndex is Index,
+	maxItemIndex(Tail, NextMax, NextIndex, NextMaxIndex, Res),!; 
+	NextIndex is Index + 1, 
+	Max > Head, maxItemIndex(Tail, Max, NextIndex, MaxIndex, Res),!.
+
+
+minItemIndex([Head|Tail], Index):- minItemIndex([Head|Tail], Head, 0, 0, Index).
+minItemIndex([], _, _, Index, Index).
+minItemIndex([Head|Tail], Min, Index, MinIndex, Res):-
+	NextIndex is Index + 1,
+	Min >= Head, NextMin is Head, NextMinIndex is Index,
+	minItemIndex(Tail, NextMin, NextIndex, NextMinIndex, Res),!; 
+	NextIndex is Index + 1, 
+	Min < Head, minItemIndex(Tail, Min, NextIndex, MinIndex, Res),!.
+
+lowerBound(List, Res):- 
+	maxItemIndex(List, Max), 
+	minItemIndex(List, Min),
+	Max > Min,
+	Res is Min,!;
+	maxItemIndex(List, Max), 
+	minItemIndex(List, Min),
+	Max < Min,
+	Res is Max,!.
+	
+upperBound(List, Res):- 
+	maxItemIndex(List, Max), 
+	minItemIndex(List, Min),
+	Max < Min,
+	Res is Min,!;
+	maxItemIndex(List, Max), 
+	minItemIndex(List, Min),
+	Max > Min,
+	Res is Max,!.
+	
+reverseList(List, Reversed):- reverseList(List, [], Reversed).
+reverseList([], Reversed, Reversed).
+reverseList([Head|Tail], Buffer, Reversed):-
+	reverseList(Tail, [Head|Buffer], Reversed).
+	
+reverseSegment(List, Processed):- 
+	lowerBound(List, Lower), upperBound(List, Upper),
+	reverseSegment(List, [], [], Lower, Upper, 0, Processed).
+reverseSegment([H|[]], [H]):-!.	
+reverseSegment([H1,H2|[]], [H1,H2]):-!.	
+reverseSegment(List, [], [], Lower, Upper, 0, List):- Lower is Upper - 1,!.	
+reverseSegment([], Processed, [_|_], _, _, _, Processed):-!.
+reverseSegment([Head|Tail], Buffer, RevSegment, Lower, Upper, Index, Processed):-	
+	Index =< Lower, NextIndex is Index + 1,
+	appendList(Buffer, [Head], NextBuffer),
+	reverseSegment(Tail, NextBuffer, RevSegment, Lower, Upper, NextIndex, Processed),!;
+	Index > Lower, Index < Upper,
+	NextIndex is Index + 1,    
+	appendList(RevSegment, [Head], NextRevSegment),
+	reverseSegment(Tail, Buffer, NextRevSegment, Lower, Upper, NextIndex, Processed),!;	
+	Index = Upper, reverseList(RevSegment, Reversed), 
+	appendList(Reversed, [Head], NextRevSegment),
+	appendList(Buffer, NextRevSegment, NextBuffer),
+	NextIndex is Index + 1, 
+	reverseSegment(Tail, NextBuffer, RevSegment, Lower, Upper, NextIndex, Processed),!;
+	Index > Upper, NextIndex is Index + 1,
+	appendList(Buffer, [Head], NextBuffer),
+	reverseSegment(Tail, NextBuffer, RevSegment, Lower, Upper, NextIndex, Processed),!.
