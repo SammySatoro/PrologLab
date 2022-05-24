@@ -9,6 +9,22 @@ gcd(A, B, X):-
 	).	
 mutuallyPrime(X, Y):- 1 is gcd(X, Y).
 
+sumOfDigits(0, 0):-!.
+sumOfDigits(N, Sum):-
+	NextN is N div 10,
+	Num is N mod 10,
+	sumOfDigits(NextN, NextSum),
+	Sum is NextSum + Num.
+
+productOfDigits(0, 0):-!.
+productOfDigits(N, 1):- N > 0, N < 10, !.
+productOfDigits(N, Product):-
+	NextN is N div 10,
+	Num is N mod 10,
+	productOfDigits(NextN, NextProduct),
+	Product is NextProduct * Num.
+
+
 % 11 Найти количество делителей числа, не делящихся на 3
 
 countDivsUp(N, N, 0):-!.
