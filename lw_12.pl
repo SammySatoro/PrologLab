@@ -105,3 +105,18 @@ sumOfSumsOfPows(N, Summator, Sum):-
 	sumOfSumsOfPows(NextN, NextSummator, Sum),!;
 	NextN is N - 1,
 	sumOfSumsOfPows(NextN, Summator, Sum),!.
+
+/*
+1.5
+Дан целочисленный массив и натуральный индекс (число, меньшее
+размера массива). Необходимо определить является ли элемент по указан-
+ному индексу глобальным минимумом.
+*/
+
+min([Head|Tail], Min):- min(Tail, Head, Min).
+min([], Min, Min).
+min([Head|Tail], CurMin, Min):-
+	Head < CurMin,
+	NextCurMin is Head,
+	min(Tail, NextCurMin, Min),!;
+	min(Tail, CurMin, Min),!.
