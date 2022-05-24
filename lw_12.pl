@@ -259,3 +259,12 @@ swapMinAndMax([Head|Tail], Buffer, Index, Min, Max, MinIndex, MaxIndex, Swapped)
 	NextIndex is Index + 1,
 	append(Buffer, [Head], NextSwapped), write(Buffer), nl,
 	swapMinAndMax(Tail, NextSwapped, NextIndex, Min, Max, MinIndex, MaxIndex, Swapped),!.
+	
+/*18 
+Дан целочисленный массив. Необходимо осуществить циклический
+сдвиг элементов массива вправо на одну позицию.
+*/
+
+cyclicalRightShift([Head|Tail], Shifted):- 
+	reverseList([Head|Tail], [RHead|RTail]), 
+	reverseList(RTail, ReversedRTail), append([RHead], ReversedRTail, Shifted),!.
