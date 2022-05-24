@@ -123,9 +123,12 @@ min([Head|Tail], CurMin, Min):-
 	Head < CurMin,
 	NextCurMin is Head,
 	min(Tail, NextCurMin, Min),!;
-	min(Tail, CurMin, Min),!.
+	Head > CurMin,
+	NextCurMin is CurMin,
+	min(Tail, NextCurMin, Min),!.
 	
-isGlobalMin([H1,H2,H3|_], 1):- min([H1,H2,H3], Min),  Min is H2, !.
-isGlobalMin([_|Tail], Index):-
+isGlobalMin(List, Index):- isGlobalMin(List, List, Index).
+isGlobalMin(List,[Head|_], 0):- min(List, Head), !.
+isGlobalMin(List, [_|Tail], Index):-
 	NextIndex is Index - 1,
-	isGlobalMin(Tail, NextIndex).
+	isGlobalMin(List, Tail, NextIndex).
