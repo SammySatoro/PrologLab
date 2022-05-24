@@ -268,3 +268,22 @@ swapMinAndMax([Head|Tail], Buffer, Index, Min, Max, MinIndex, MaxIndex, Swapped)
 cyclicalRightShift([Head|Tail], Shifted):- 
 	reverseList([Head|Tail], [RHead|RTail]), 
 	reverseList(RTail, ReversedRTail), append([RHead], ReversedRTail, Shifted),!.
+
+/* 19
+Дан целочисленный массив. Необходимо найти количество элемен-
+тов между первым и последним минимальным.
+*/
+
+countBetweenMins(List, Count):-
+	minItemIndex(List, LastMin),
+	reverseList(List, Reversed),
+	minItemIndex(Reversed, NotFirstMin),
+	listLength(List, Length),
+	FirstMin is (Length - NotFirstMin) - 1,
+	countBetweenMins(List, 0, FirstMin, LastMin, Count),!.
+
+countBetweenMins([], _, _, _, 0).	
+countBetweenMins([_|Tail], Index, FirstMin, LastMin, Count):-
+	NextIndex is Index + 1,	
+	countBetweenMins(Tail, NextIndex, FirstMin, LastMin, NextCount),	
+	(Index > FirstMin, Index < LastMin, Count is NextCount + 1; Count is NextCount).
