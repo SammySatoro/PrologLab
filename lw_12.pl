@@ -111,7 +111,7 @@ listLength([], 0):- !.
 listLength([_|Tail], Length):- listLength(Tail, NextLength), Length is NextLength + 1, !.
 
 /*
-1.5
+15
 Дан целочисленный массив и натуральный индекс (число, меньшее
 размера массива). Необходимо определить является ли элемент по указан-
 ному индексу глобальным минимумом.
@@ -222,3 +222,40 @@ reverseSegment([Head|Tail], Buffer, RevSegment, Lower, Upper, Index, Processed):
 	Index > Upper, NextIndex is Index + 1,
 	appendList(Buffer, [Head], NextBuffer),
 	reverseSegment(Tail, NextBuffer, RevSegment, Lower, Upper, NextIndex, Processed),!.
+	
+/* 17 
+Дан целочисленный массив. Необходимо поменять местами мини-
+мальный и максимальный элементы массива.
+*/	
+
+
+max([Max], Max):-!.
+max([Head|Tail], Max):-
+   max(Tail, TailMax),
+   TailMax > Head, !, Max is TailMax;
+   Max is Head.
+
+min([Min], Min):-!.
+min([Head|Tail], Min):-
+   min(Tail, TailMin),
+   TailMin < Head, !, Min is TailMin;
+   Min is Head.
+	
+swapMinAndMax(List, Swapped):-
+	maxItemIndex(List, MaxIndex),
+	minItemIndex(List, MinIndex),
+	max(List, Max),
+	min(List, Min),
+	swapMinAndMax(List, [], 0, Min, Max, MinIndex, MaxIndex, Swapped),!.
+	
+swapMinAndMax([], Swapped, _, _, _, _, _, Swapped):- !.
+swapMinAndMax([Head|Tail], Buffer, Index, Min, Max, MinIndex, MaxIndex, Swapped):-	
+	Index is MinIndex, NextIndex is Index + 1,
+	append(Buffer, [Max], NextSwapped), write(Buffer), nl,
+	swapMinAndMax(Tail, NextSwapped, NextIndex, Min, Max, MinIndex, MaxIndex, Swapped),!; 
+	Index is MaxIndex, NextIndex is Index + 1,
+	append(Buffer, [Min], NextSwapped), write(Buffer), nl,
+	swapMinAndMax(Tail, NextSwapped, NextIndex, Min, Max, MinIndex, MaxIndex, Swapped),!;
+	NextIndex is Index + 1,
+	append(Buffer, [Head], NextSwapped), write(Buffer), nl,
+	swapMinAndMax(Tail, NextSwapped, NextIndex, Min, Max, MinIndex, MaxIndex, Swapped),!.
