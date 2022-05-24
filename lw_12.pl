@@ -1,4 +1,4 @@
-% Найти количество делителей числа, не делящихся на 3
+% 11 Найти количество делителей числа, не делящихся на 3
 
 countDivsUp(N, N, 0):-!.
 countDivsUp(N, Div, Count):-
@@ -15,3 +15,13 @@ countDivsUp(N, Div, Count):-
 	countDivsUp(N, NextDiv, NextCount),
 	Count is NextCount,!.
 countDivsUp(N, Count):- countDivsUp(N, 0, Count).
+%------------------------------------------------------
+countDivsDown(N, Count):- countDivsDown(N, 0, 0, Count).
+countDivsDown(N, N, Count, Count):-!.
+countDivsDown(N, Div, Counter, Count):-
+	NextDiv is Div + 1,
+	NextCounter is Counter + 1,
+	0 is N mod NextDiv, 0 =\= NextDiv mod 3,
+	countDivsDown(N, NextDiv, NextCounter, Count),!;
+	NextDiv is Div + 1,
+	countDivsDown(N, NextDiv, Counter, Count),!.
