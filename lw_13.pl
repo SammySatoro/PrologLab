@@ -129,3 +129,61 @@ task15:-
 	\+member(Women,[natasha,Y,Y]),
 	write(Women),!.
 	
+/* 16
+На заводе работали три друга: слесарь, токарь и сварщик. Их фамилии Борисов, Иванов и Семенов. У слесаря нет ни братьев, ни сестер. 
+Он самый младший из друзей. Семенов, женатый на сестре Борисова, старше токаря. Назвать фамилии слесаря, токаря и сварщика.
+*/
+
+task16:- 
+	Workers = [_,_,_],
+	/*member(Workers,[slesar,borisov,brothers_count,age,is_relative])*/
+	member(Workers,[slesar,_,0,0,_]),
+	member(Workers,[tokar,_,_,1,_]),
+	member(Workers,[svarshick,_,_,_,_]),
+	member(Workers,[_,semenov,_,2,borisov]),
+	member(Workers,[_,ivanov,_,_,_]),
+	member(Workers,[_,borisov,1,_,_]),
+	member(Workers,[slesar,Who1,_,_,_]),
+	member(Workers,[tokar,Who2,_,_,_]),
+	member(Workers,[svarshick,Who3,_,_,_]),
+	write('slesar - '),write(Who1),nl,
+	write('tokar - '),write(Who2),nl,
+	write('svarshick - '),write(Who3),!.
+
+
+/* 17
+В бутылке, стакане, кувшине и банке находятся молоко, лимонад, квас и вода. Известно, что вода и молоко не в бутылке, 
+сосуд с лимонадом находится между кувшином и сосудом с квасом, в банке - не лимонад и не вода. 
+Стакан находится около банки и сосуда с молоком. Как распределены эти жидкости по сосудам.
+*/
+
+right(_,_,[_]):-fail.
+right(Item,RightItem,[Item|[RightItem|_]]).
+right(Item,RightItem,[_|Tail]):-right(Item,RightItem,Tail).
+
+left(_,_,[_]):-fail.
+left(Item,LeftItem,[LeftItem|[Item|_]]).
+left(Item,LeftItem,[_|Tail]):-left(Item,LeftItem,Tail).
+
+isNextTo(A,B,List):-right(A,B,List).
+isNextTo(A,B,List):-left(A,B,List).
+
+task17:- 
+    Liquid=[_,_,_,_],
+    member(Liquid,[bottle,_]),
+    member(Liquid,[glass,_]),
+    member(Liquid,[pitcher,_]),
+    member(Liquid,[jar,_]),
+    member(Liquid,[_,milk]),
+    member(Liquid,[_,lemonade]),
+    member(Liquid,[_,kvas]),
+    member(Liquid,[_,water]),
+    \+(member(Liquid,[bottle,milk])),
+    \+(member(Liquid,[bottle,water])),
+    \+(member(Liquid,[jar,lemonade])),
+    \+(member(Liquid,[jar,water])),
+    right([pitcher,_],[_,lemonade],Liquid),
+    right([_,lemonade],[_,kvas],Liquid),
+    isNextTo([glass,_],[jar,_],Liquid),
+    isNextTo([glass,_],[_,milk],Liquid),
+    write(Liquid),!.
