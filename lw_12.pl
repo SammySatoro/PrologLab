@@ -287,3 +287,30 @@ countBetweenMins([_|Tail], Index, FirstMin, LastMin, Count):-
 	NextIndex is Index + 1,	
 	countBetweenMins(Tail, NextIndex, FirstMin, LastMin, NextCount),	
 	(Index > FirstMin, Index < LastMin, Count is NextCount + 1; Count is NextCount).
+
+/* 20
+Дан целочисленный массив и интервал a..b. Необходимо проверить
+наличие максимального элемента массива в этом интервале.
+*/
+
+
+getListOfMaxsIndexes(List, Maxs):-
+	max(List, Max),
+	getListOfMaxsIndexes(List, [], 0, Max, Maxs),!.
+
+getListOfMaxsIndexes([], Maxs, _, _, Maxs):-!.
+getListOfMaxsIndexes([Head|Tail], Buffer, Index, Max, Maxs):-
+	Head is Max,
+	NextIndex is Index + 1,
+	appendList(Buffer, [Index], NextBuffer),
+	getListOfMaxsIndexes(Tail, NextBuffer, NextIndex, Max, Maxs),!;
+	NextIndex is Index + 1,
+	getListOfMaxsIndexes(Tail, Buffer, NextIndex, Max, Maxs).
+	
+isWithinBounds(List, A, B):- 
+	getListOfMaxsIndexes(List, Indexes),
+	isWithinBounds_(Indexes, A, B).	
+isWithinBounds_([], _, _):- fail,!.
+isWithinBounds_([Head|Tail], A, B):-
+	Head > A, Head < B, !;
+	isWithinBounds_(Tail, A, B),!.
