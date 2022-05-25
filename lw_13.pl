@@ -215,3 +215,35 @@ task18:-
 	\+(member(Men,[pavlov,artist])),
 	\+(member(Men,[voronov,artist])),
 	write(Men),!.
+
+/* 19
+Три друга заняли первое, второе, третье места в соревнова-
+ниях универсиады. Друзья разной национальности, зовут их по-разному, и лю-
+бят они разные виды спорта. Майкл предпочитает баскетбол и играет лучше,
+чем американец. Израильтянин Саймон играет лучше теннисиста. Игрок в кри-
+кет занял первое место. Кто является австралийцем? Каким спортом увлека-
+ется Ричард?*/
+
+/*
+майкл австралиец баскетболист
+саймон израильтянин крикетист
+ричард американец теннисист
+*/
+
+task19:- 
+	Athletas = [_,_,_],
+	member(Athletas,[michael,_,basketball,_]),
+	member(Athletas,[saimon,israel,_,_]),
+	member(Athletas,[_,_,cricket,first]),
+	member(Athletas,[richard,_,_,_]),
+	member(Athletas,[_,_,tennis,_]),
+	member(Athletas,[_,american,_,_]),
+	member(Athletas,[_,australian,_,_]),
+	member(Athletas,[_,_,_,second]),
+	member(Athletas,[_,_,_,third]),
+	\+(member(Athletas,[michael,american,_,_])),
+	\+(member(Athletas,[saimon,_,tennis,_])),
+	member(Athletas,[Who1,australian,_,_]),
+	member(Athletas,[richard,_,Who2,_]),
+	write('Australian - '), write(Who1), nl,
+	write('Richard plays - '), write(Who2),!.
