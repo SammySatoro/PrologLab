@@ -187,3 +187,31 @@ task17:-
     isNextTo([glass,_],[jar,_],Liquid),
     isNextTo([glass,_],[_,milk],Liquid),
     write(Liquid),!.
+
+/* 18
+Воронов, Павлов, Левицкий и Сахаров – четыре талантли-
+вых молодых человека. Один из них танцор, другой художник, третий-певец,
+а четвертый-писатель. О них известно следующее: Воронов и Левицкий си-
+дели в зале консерватории в тот вечер, когда певец дебютировал в сольном
+концерте. Павлов и писатель вместе позировали художнику. Писатель написал
+биографическую повесть о Сахарове и собирается написать о Воронове. Воро-
+нов никогда не слышал о Левицком. Кто чем занимается?*/
+
+task18:- 
+	Men=[_,_,_,_],
+	member(Men,[pavlov,_]),
+	member(Men,[levicki,_]),
+	member(Men,[saharov,_]),
+	member(Men,[voronov,_]),
+	member(Men,[_,dancer]),
+	member(Men,[_,artist]),
+	member(Men,[_,singer]),
+	member(Men,[_,writer]),
+	\+(member(Men,[saharov,writer])),
+	\+(member(Men,[voronov,writer])),
+	\+(member(Men,[voronov,singer])),
+	\+(member(Men,[levicki,singer])),
+	\+(member(Men,[pavlov,writer])),
+	\+(member(Men,[pavlov,artist])),
+	\+(member(Men,[voronov,artist])),
+	write(Men),!.
