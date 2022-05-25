@@ -247,3 +247,44 @@ task19:-
 	member(Athletas,[richard,_,Who2,_]),
 	write('Australian - '), write(Who1), nl,
 	write('Richard plays - '), write(Who2),!.
+
+/* 20
+Четыре человека играют в домино. Их фамилии Кузнецов, Токарев, Слесарев и Резчиков. 
+Профессия каждого игрока соответствует фамилии одного из других игроков. 
+Напротив Кузнецова сидит слесарь. Напротив Резчикова сидит резчик. 
+Справа от Слесарева сидит токарь. Кто сидит слева от кузнеца?
+*/
+
+/*
+     Кузнецов  напротив  слесаря
+	 Резчиков  напротив  резчика
+	 Слесарев слева от токаря
+	 Токарев 
+	 
+	 |1 ||| 3|
+	 |2 ||| 4|
+*/
+
+
+task20:-
+	Players = [_,_,_,_],
+	member(Players, [kuznetsov,_]),
+	member(Players, [rezchikov,_]),
+	member(Players, [slesarev,_]),
+	member(Players, [tokarev,_]),
+	member(Players, [_,blacksmith]),
+	member(Players, [_,carver]),
+	member(Players, [_,locksmith]),
+	member(Players, [_,turner]),		
+	\+member(Players, [kuznetsov, blacksmith]),
+	\+member(Players, [rezchikov, carver]),
+	\+member(Players, [slesarev, locksmith]),
+	\+member(Players, [tokarev, turner]),
+	\+member(Players, [kuznetsov, locksmith]),
+	\+member(Players, [slesarev, turner]),
+	\+isNextTo([kuznetsov,_], [_,locksmith], Players),
+	\+isNextTo([rezchikov,_], [_,carver], Players),
+	left([_,turner], [slesarev,_], Players),
+	left([_,blacksmith], [Who,_], Players),
+	write(Players), nl,
+	write("Is sitting left to blacksmith - "), write(Who).
