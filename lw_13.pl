@@ -65,3 +65,21 @@ listOfDistinctPrimes([Head|Tail], Buffer, Distincts):-
 	listOfDistinctPrimes(Tail, Buffer, Distincts);
 	appendList(Buffer, [Head], NextBuffer),	
 	listOfDistinctPrimes(Tail, NextBuffer, Distincts).
+
+/* 13
+Для введенного списка построить новый с элементами, большими, чем
+среднее арифметическое списка, но меньшими, чем его максимальное значе-
+ние.
+*/
+
+buildList(List, NewList):- 
+	max(List, Max),
+	averageOfAbs(List, Average),
+	buildList(List, [], Max, Average, NewList),!.
+
+buildList([], NewList, _, _, NewList).
+buildList([Head|Tail], Buffer, Max, Average, NewList):-
+	Head < Max, Head > Average,
+	appendList(Buffer, [Head], NextBuffer),
+	buildList(Tail, NextBuffer, Max, Average, NewList);
+	buildList(Tail, Buffer, Max, Average, NewList).
