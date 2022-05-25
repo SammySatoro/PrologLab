@@ -1,3 +1,6 @@
+writeList([]):- writeln(''), !.
+writeList([Head|Tail]):- write(Head), write(' '), writeList(Tail). 
+
 /* 11
 Дан целочисленный массив. Найти среднее арифметическое моду-
 лей его элементов.
@@ -83,3 +86,46 @@ buildList([Head|Tail], Buffer, Max, Average, NewList):-
 	appendList(Buffer, [Head], NextBuffer),
 	buildList(Tail, NextBuffer, Max, Average, NewList);
 	buildList(Tail, Buffer, Max, Average, NewList).
+
+/* 14 
+Беседует трое друзей: Белокуров, Рыжов, Чернов. Брюнет
+сказал Белокурову: “Любопытно, что один из нас блондин, другой брюнет,
+третий - рыжий, но ни у кого цвет волос не соответствует фамилии”. Какой
+цвет волос у каждого из друзей?
+*/
+
+task14:- 
+	HairColors=[_,_,_],
+	member(HairColors,[belokurov,_]),
+	member(HairColors,[chernov,_]),
+	member(HairColors,[rizhov,_]),
+	member(HairColors,[_,ginger]),
+	member(HairColors,[_,blond]),
+	member(HairColors,[_,brunette]),
+	\+(member(HairColors,[belokurov,blond])),
+	\+(member(HairColors,[chernov,brunette])),
+	\+(member(HairColors,[rizhov,ginger])),
+	write(HairColors),!.
+	
+/* 15
+Три подруги вышли в белом, зеленом и синем платьях и туфлях. 
+Известно, что только у Ани цвета платья и туфлей совпадали. Ни туфли,ни платье Вали не были белыми. 
+Наташа была в зеленых туфлях. Определить цвета платья и туфель на каждой из подруг.
+*/
+
+task15:- 
+	Women=[_,_,_],
+	member(Women,[ann,X,X]),
+	member(Women,[valya,_,_]),
+	member(Women,[natasha,_,_]),
+	member(Women,[_,white,_]),
+	member(Women,[_,green,_]),
+	member(Women,[_,blue,_]),
+	member(Women,[_,_,white]),
+	member(Women,[_,_,green]),
+	member(Women,[_,_,blue]),
+	\+member(Women,[valya,white,_]),
+	\+member(Women,[valya,_,white]),
+	\+member(Women,[natasha,Y,Y]),
+	write(Women),!.
+	
