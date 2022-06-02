@@ -279,7 +279,7 @@ shuffleString(String, Shuffled):-
 	shuffleList(Chars, ShuffledChars),
 	string_chars(Shuffled, ShuffledChars).
 
-/*7 Дана строка, состоящая из символов латиницы. Необходимо проверить,
+/*4-7 Дана строка, состоящая из символов латиницы. Необходимо проверить,
 образуют ли прописные символы этой строки палиндром.*/
 
 getUppercaseCharsList(String, List):-
