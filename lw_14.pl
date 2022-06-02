@@ -393,6 +393,8 @@ task8:-append([],[97,98,99,100,101,102], Mnoj),
 		writeS(Word),nl,fail
 	)),
 	told.
+	
+	
 %9 Дано множество {a,b,c,d,e,f}. Построить все слова длины 5, в которых ровно одна буква повторяется 2 раза, остальные буквы не повторяются. Вывод в файл.
 buildWord9(RepeatChars,WhereA,AnotherChars,Word):-buildWord9(RepeatChars,WhereA,AnotherChars,Word,0).
 buildWord9(RepeatChars,[],[],Word,Index):-makeEmptyList(Word),!.
