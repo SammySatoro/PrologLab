@@ -279,6 +279,35 @@ shuffleString(String, Shuffled):-
 	shuffleList(Chars, ShuffledChars),
 	string_chars(Shuffled, ShuffledChars).
 
+/*7 Дана строка, состоящая из символов латиницы. Необходимо проверить,
+образуют ли прописные символы этой строки палиндром.*/
+
+getUppercaseCharsList(String, List):-
+	string_codes(String, Codes),
+	getUppercaseCharsList_(Codes, [], List).	
+getUppercaseCharsList_([], List, List).
+getUppercaseCharsList_([Head|Tail], Buffer, List):-
+	Head > 64, Head < 91,
+	getUppercaseCharsList_(Tail, [Head|Buffer], List),!;
+	getUppercaseCharsList_(Tail, Buffer, List),!.
+
+reverseList(List, Reversed):- reverseList(List, [], Reversed).
+reverseList([], Reversed, Reversed).
+reverseList([Head|Tail], Buffer, Reversed):-
+	reverseList(Tail, [Head|Buffer], Reversed).
+
+isUppercaseAPalindrome(String):-
+	getUppercaseCharsList(String, Chars),	
+	reverseList(Chars, ReversedChars),
+	isUppercaseAPalindrome(Chars, ReversedChars),!.
+
+isUppercaseAPalindrome([Last], [Last]).	
+isUppercaseAPalindrome([Head|Tail], [Head2|Tail2]):-
+		Head is Head2,
+		isUppercaseAPalindrome(Tail, Tail2),!;
+		!, fail.
+
+
 %6 Результат записывать в файл.
 task6:-see('D:/Prolog/inputLW14/6.txt'),readOneS(StrK,_),readOneS(Mnoj,_),K is StrK-48,seen,
 	tell('D:/Prolog/outputLW14/6.txt'),
