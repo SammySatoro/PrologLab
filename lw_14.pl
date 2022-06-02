@@ -245,6 +245,40 @@ isStrInStrList(Str,[ListStrH|ListStrT]):-
 task25:-see('D:/Prolog/inputLW14/25.txt'),readListS(ListStr),getStrWithUniqueWordsFromListStr(ListStr,NewListStr),seen,
 	tell('D:/Prolog/outputLW14/25.txt'),writeListS(NewListStr),told.
 
+/*3-5 Дана строка. Необходимо перемешать все символы строки в случайном
+порядке.*/
+
+listLength([], 0):- !.
+listLength([_|Tail], Length):- 
+	listLength(Tail, NextLength), 
+	Length is NextLength + 1, !. 
+
+removeItemByIndex(0, [_|Tail], Tail):-!.
+removeItemByIndex(Index, [Head|Tail1], [Head|Tail2]) :- 
+	NextIndex is Index - 1,	
+	removeItemByIndex(NextIndex,Tail1,Tail2),!.
+
+getItemByIndex(0, [Head|_], Head):-!.
+getItemByIndex(Index, [_|Tail], Item) :- 
+	NextIndex is Index - 1,	
+	getItemByIndex(NextIndex,Tail,Item),!.
+
+shuffleList(List, Shuffled):-
+	listLength(List, Length),
+	shuffleList(List, Length, [], Shuffled),!.
+shuffleList([], 0, Shuffled, Shuffled).
+shuffleList(List, Length, Buffer, Shuffled):-
+	NextLength is Length - 1,
+	RandomIndex is random(Length),
+	getItemByIndex(RandomIndex, List, Item),
+	removeItemByIndex(RandomIndex, List, ListWithoutItem),
+	shuffleList(ListWithoutItem, NextLength, [Item|Buffer], Shuffled).
+
+shuffleString(String, Shuffled):-
+	string_chars(String, Chars),
+	shuffleList(Chars, ShuffledChars),
+	string_chars(Shuffled, ShuffledChars).
+
 %6 Результат записывать в файл.
 task6:-see('D:/Prolog/inputLW14/6.txt'),readOneS(StrK,_),readOneS(Mnoj,_),K is StrK-48,seen,
 	tell('D:/Prolog/outputLW14/6.txt'),
