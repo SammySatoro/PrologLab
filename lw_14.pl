@@ -244,3 +244,142 @@ isStrInStrList(Str,[ListStrH|ListStrT]):-
 
 task25:-see('D:/Prolog/inputLW14/25.txt'),readListS(ListStr),getStrWithUniqueWordsFromListStr(ListStr,NewListStr),seen,
 	tell('D:/Prolog/outputLW14/25.txt'),writeListS(NewListStr),told.
+
+%6 Результат записывать в файл.
+task6:-see('D:/Prolog/inputLW14/6.txt'),readOneS(StrK,_),readOneS(Mnoj,_),K is StrK-48,seen,
+	tell('D:/Prolog/outputLW14/6.txt'),
+	write('6.1:'),nl, %6.1 Дано множество. Построить все размещения с повторениями по k элементов.
+	not(razmesheniyaSPoovtoreniyamiPoK(Mnoj,K,[])),nl,!,
+	write('6.2:'),nl, %6.2 Дано множество. Построить все перестановки.
+	not(perestanovki(Mnoj,[])),nl,!,
+	write('6.3:'),nl, %6.3 Дано множество. Построить все размещения по k элементов.
+	not(razmesheniyaPoK(Mnoj,K,[])),nl,!,
+	write('6.4:'),nl, %6.4 Дано множество. Построить все подмножества.
+	allPodMnoj(Mnoj,[]),!,
+	write('6.5'),nl, %6.5 Дано множество. Построить все сочетания по k элементов.
+	sochetaniyaPoK(Mnoj,K,[]),!,
+	write('6.6'),nl, %6.6 Дано множество. Построить все сочетания с повторениями.
+	sochetaniyaSPovtoreniyamiPoK(Mnoj,K,[]),!,
+	told.
+
+
+
+razmesheniyaSPoovtoreniyamiPoK(_,0,Rasm):-writeS(Rasm),nl,!,fail.
+razmesheniyaSPoovtoreniyamiPoK(Mnoj,K,Rasm):-
+	inList(Mnoj,El),
+	K1 is K-1,
+	razmesheniyaSPoovtoreniyamiPoK(Mnoj,K1,[El|Rasm]).
+
+perestanovki([],Per):-writeS(Per),nl,!,fail.
+perestanovki(Mnoj,Per):-inListAndDelete(Mnoj,El,Mnoj1),perestanovki(Mnoj1,[El|Per]).
+
+razmesheniyaPoK(_,0,Raz):-writeS(Raz),nl,!,fail.
+razmesheniyaPoK(Mnoj,K,Raz):-inListAndDelete(Mnoj,El,Mnoj1),K1 is K-1,razmesheniyaPoK(Mnoj1,K1,[El|Raz]).
+
+allPodMnoj(Mnoj,PodMnoj):-allPodMnoj(Mnoj,PodMnoj,1).
+allPodMnoj([],PodMnoj,IsNeedToWrite):-
+	(
+		1 is IsNeedToWrite,
+		writeS(PodMnoj),nl;
+		IsNeedToWrite is 0
+	),!.
+allPodMnoj(Mnoj,PodMnoj,IsNeedToWrite):-
+	(
+		IsNeedToWrite is 1,
+		writeS(PodMnoj),nl;
+		IsNeedToWrite is 0
+	),
+	inListAndDelete(Mnoj,El,Mnoj1),
+	append([El],PodMnoj,NewPodMnoj),
+	allPodMnoj(Mnoj1,PodMnoj,0),
+	allPodMnoj(Mnoj1,NewPodMnoj,1).
+
+sochetaniyaPoK([],K,PodMnoj):-
+	0 is K,
+	writeS(PodMnoj),nl,!;
+	!.
+sochetaniyaPoK(Mnoj,0,PodMnoj):-
+	writeS(PodMnoj),nl,!.
+sochetaniyaPoK(Mnoj,K,PodMnoj):-
+	inListAndDelete(Mnoj,El,Mnoj1),
+	append([El],PodMnoj,NewPodMnoj),
+	K1 is K-1,
+	sochetaniyaPoK(Mnoj1,K,PodMnoj),
+	sochetaniyaPoK(Mnoj1,K1,NewPodMnoj).
+
+sochetaniyaSPovtoreniyamiPoK([],K,PodMnoj):-
+	0 is K,
+	writeS(PodMnoj),nl,!;
+	!.
+sochetaniyaSPovtoreniyamiPoK(Mnoj,0,PodMnoj):-
+	writeS(PodMnoj),nl,!.
+sochetaniyaSPovtoreniyamiPoK(Mnoj,K,PodMnoj):-
+	cutLastChar(Mnoj,Mnoj1,El),
+	append([El],PodMnoj,NewPodMnoj),
+	K1 is K-1,
+	sochetaniyaSPovtoreniyamiPoK(Mnoj1,K,PodMnoj),
+	sochetaniyaSPovtoreniyamiPoK(Mnoj,K1,NewPodMnoj),!.
+
+inList([],_):-fail.
+inList([X|_],X).
+inList([_|T],X):-inList(T,X).
+
+inListAndDelete([El|T],El,T).
+inListAndDelete([H|T],El,[H|Tail]):-inListAndDelete(T,El,Tail).
+
+inListAndAllBeforeDelete([El|T],El,T).
+inListAndAllBeforeDelete([H|T],El,Tail):-inListAndAllBeforeDelete(T,El,Tail).
+%7 Дано множество {a,b,c,d,e,f}. Построить все слова длины 5, в которых ровно две буквы a. Вывод в файл.
+getRazmesheniePoK(_,0,Final,Final):-!.
+getRazmesheniePoK(Mnoj,K,Raz,Final):-inListAndDelete(Mnoj,El,Mnoj1),K1 is K-1,getRazmesheniePoK(Mnoj1,K1,[El|Raz],Final).
+
+getSochetaniyaPoK([],K,PodMnoj,Final):-
+	0 is K,
+	append([],PodMnoj,Final),!.
+getSochetaniyaPoK(Mnoj,0,Final,Final):-!.
+getSochetaniyaPoK(Mnoj,K,PodMnoj,Final):-
+	inListAndAllBeforeDelete(Mnoj,El,Mnoj1),
+	append([El],PodMnoj,NewPodMnoj),
+	K1 is K-1,
+	getSochetaniyaPoK(Mnoj1,K1,NewPodMnoj,Final).
+
+getRazmesheniyaSPovtoreniyamiPoK(_,0,Final,Final):-!.
+getRazmesheniyaSPovtoreniyamiPoK(Mnoj,K,Rasm,Final):-
+	inList(Mnoj,El),
+	K1 is K-1,
+	getRazmesheniyaSPovtoreniyamiPoK(Mnoj,K1,[El|Rasm],Final).
+
+buildWord7(WhereA,AnotherChars,Word):-buildWord7(WhereA,AnotherChars,Word,0).
+buildWord7([],[],Word,Index):-makeEmptyList(Word),!.
+buildWord7(WhereA,[AnotherCharsH|AnotherCharsT],Word,Index):-
+	Index1 is Index+1,
+	(
+		inListAndDelete(WhereA, Index,WhereA1),
+
+		buildWord7(WhereA1,[AnotherCharsH|AnotherCharsT],Word1,Index1),
+		append([97],Word1,Word);
+
+		buildWord7(WhereA,AnotherCharsT,Word1,Index1),
+		append([AnotherCharsH],Word1,Word)
+	),!.
+buildWord7(WhereA,AnotherChar,Word,Index):-
+	Index1 is Index+1,
+	(
+		inListAndDelete(WhereA, Index,WhereA1),
+
+		buildWord7(WhereA1,AnotherChar,Word1,Index1),
+		append([97],Word1,Word);
+
+		buildWord7(WhereA,[],Word1,Index1),
+		append([AnotherChar],Word1,Word)
+	),!.
+
+task7:-append([],[97,98,99,100,101,102], Mnoj),
+	tell('D:/Prolog/outputLW14/7.txt'),
+	not((
+		getRazmesheniyaSPovtoreniyamiPoK([98,99,100,101,102],3,[],AnotherChars), %выбираем последовательность из 3 букв
+		getSochetaniyaPoK([0,1,2,3,4],2,[],WhereA), % выбираем 2 места под а
+		buildWord7(WhereA,AnotherChars,Word),
+		writeS(Word),nl,fail
+	)),
+	told.
