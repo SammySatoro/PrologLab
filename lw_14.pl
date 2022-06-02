@@ -133,3 +133,114 @@ getNumberOfCharsLikeThat([StrH|StrT],ListNumbers,LastChar,I):-
 
 	getNumberOfCharsLikeThat(StrT,ListNumbers,LastChar,I1),!	
 	).
+	
+task21:-see('D:/Prolog/inputLW14/21.txt'),readListS(ListStr),getMaxLengthStr(ListStr,MaxLength),seen,
+	tell('D:/Prolog/outputLW14/21.txt'),write(MaxLength),told.
+	
+%2.2 Дан файл. Определить, сколько в файле строк, не содержащих пробелы.
+getCountOfStrWithoutSpace([],Count):- Count is 0,!.
+getCountOfStrWithoutSpace([ListStrH|ListStrT],Count):-
+	isThisCharInStr(ListStrH,32),
+
+	getCountOfStrWithoutSpace(ListStrT,Count),!;
+
+	getCountOfStrWithoutSpace(ListStrT,Count1),
+	Count is Count1+1,!.
+
+isThisCharInStr([],Char):-fail,!.
+isThisCharInStr([StrH|StrT],Char):-!,
+	(
+		StrH = Char;
+
+		isThisCharInStr(StrT,Char)
+	),!.
+
+task22:-see('D:/Prolog/inputLW14/22.txt'),readListS(ListStr),getCountOfStrWithoutSpace(ListStr,Count),seen,
+	tell('D:/Prolog/outputLW14/22.txt'),write(Count),told,!.
+%2.3 Дан файл, найти и вывести на экран только те строки, в которых букв А больше, чем в среднем на строку.
+getCountOfCharsLikeThat(Str,Char,Count):-
+	getNumberOfCharsLikeThat(Str,IndexList,Char),
+	listLength(IndexList,Count),!.
+
+getCountOfCharInListStr([],Char,CountOfA):-CountOfA is 0.
+getCountOfCharInListStr([ListStrH|ListStrT],Char,CountOfA):-
+	getCountOfCharsLikeThat(ListStrH,Char,Count),
+	getCountOfCharInListStr(ListStrT,Char,CountOfA1),
+	CountOfA is CountOfA1+Count,!.	
+
+getListOfStrWhereCountOfCharMoreThenThis([],Char,ThisCount,NewList):-makeEmptyList(NewList),!.
+getListOfStrWhereCountOfCharMoreThenThis([ListStrH|ListStrT],Char,ThisCount,NewList):-
+	getCountOfCharsLikeThat(ListStrH,Char,CountOfA),
+	(
+		CountOfA>ThisCount,
+		getListOfStrWhereCountOfCharMoreThenThis(ListStrT,Char,ThisCount,NewList1),
+		append([ListStrH],NewList1,NewList);
+
+		getListOfStrWhereCountOfCharMoreThenThis(ListStr,Char,ThisCount,NewList)
+	),!.
+
+getListOfStrWhereMoreAThenAvgOfA(ListStr,NewList):-
+	getCountOfCharInListStr(ListStr,65,CountOfA),
+	listLength(ListStr,Length),
+	AvgOfA is CountOfA / Length,
+	getListOfStrWhereCountOfCharMoreThenThis(ListStr,65,AvgOfA,NewList),!.
+
+task23:-see('D:/Prolog/inputLW14/23.txt'),readListS(ListStr),getListOfStrWhereMoreAThenAvgOfA(ListStr,NewList),seen,
+	tell('D:/Prolog/outputLW14/23.txt'),writeListS(NewList),told.
+%2.4 Дан файл, вывести самое частое слово.
+getMostRatedWordFromListStr(ListStr,Word):-
+	getListOfWordsFromListStr(ListStr,WordsList),
+	mostRatedWordFromList(WordsList,Word).
+
+getListOfWordsFromListStr([],WordsList):-makeEmptyList(WordsList),!.
+getListOfWordsFromListStr([ListStrH|ListStrT],WordsList):-
+	getListOfWordsFromStr(ListStrH,WordsList1),
+	getListOfWordsFromListStr(ListStrT,WordsList2),
+	append(WordsList1,WordsList2,WordsList),!.	
+
+task24:-see('D:/Prolog/inputLW14/24.txt'),readListS(ListStr),getMostRatedWordFromListStr(ListStr,Word),seen,
+	tell('D:/Prolog/outputLW14/24.txt'),writeS(Word),told.
+%2.5 Дан файл, вывести в отдельный файл строки, состоящие из слов, не повторяющихся в исходном файле.
+getStrWithUniqueWordsFromListStr(ListStr,NewListStr):-
+	getListOfWordsFromListStr(ListStr,WordsList),
+	getUniqueWordsFromWordsList(WordsList,UniqueWordsList),
+	getStrWithUniqueWords(ListStr,UniqueWordsList,NewListStr).
+
+getUniqueWordsFromWordsList(WordsList,UniqueWordsList):-getUniqueWordsFromWordsList(WordsList,UniqueWordsList,WordsList),!.
+
+getUniqueWordsFromWordsList([],UniqueWordsList,StartList):-makeEmptyList(UniqueWordsList),!.
+getUniqueWordsFromWordsList([WordsListH|WordsListT],UniqueWordsList,StartList):-
+	countOfThisWordInList(StartList,WordsListH,Count),
+	(
+		1 is Count,
+		getUniqueWordsFromWordsList(WordsListT,UniqueWordsList1,StartList),
+		append([WordsListH],UniqueWordsList1, UniqueWordsList);
+
+		getUniqueWordsFromWordsList(WordsListT,UniqueWordsList,StartList)
+	),!.
+
+getStrWithUniqueWords([],UniqueWordsList,NewListStr):-makeEmptyList(NewListStr),!.
+getStrWithUniqueWords([ListStrH|ListStrT],UniqueWordsList,NewListStr):-
+	isThereUniqueWordsInStr(ListStrH,UniqueWordsList),
+	getStrWithUniqueWords(ListStrT,UniqueWordsList,NewListStr1),
+	append([ListStrH],NewListStr1,NewListStr),!;
+
+	getStrWithUniqueWords(ListStrT,UniqueWordsList,NewListStr),!.
+
+isThereUniqueWordsInStr(Str,UniqueWordsList):-
+	getListOfWordsFromStr(Str,WordsList),
+	isThereUniqueWordsInWordList(WordsList,UniqueWordsList).
+
+isThereUniqueWordsInWordList([],UniqueWordsList):-!.
+isThereUniqueWordsInWordList([WordsListH|WordsListT],UniqueWordsList):-
+	isStrInStrList(WordsListH,UniqueWordsList),
+	isThereUniqueWordsInWordList(WordsListT,UniqueWordsList),!.
+
+isStrInStrList(Str,[]):-fail,!.
+isStrInStrList(Str,[ListStrH|ListStrT]):- 
+	Str = ListStrH,!;
+	isStrInStrList(Str,ListStrT),!.
+	
+
+task25:-see('D:/Prolog/inputLW14/25.txt'),readListS(ListStr),getStrWithUniqueWordsFromListStr(ListStr,NewListStr),seen,
+	tell('D:/Prolog/outputLW14/25.txt'),writeListS(NewListStr),told.
