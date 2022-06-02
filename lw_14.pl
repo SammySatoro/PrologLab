@@ -383,3 +383,51 @@ task7:-append([],[97,98,99,100,101,102], Mnoj),
 		writeS(Word),nl,fail
 	)),
 	told.
+%8 Дано множество {a,b,c,d,e,f}. Построить все слова длины 5, в которых ровно 2 буквы a, остальные буквы не повторяются. Вывод в файл.
+task8:-append([],[97,98,99,100,101,102], Mnoj),
+	tell('D:/Prolog/outputLW14/8.txt'),
+	not((
+		getRazmesheniePoK([98,99,100,101,102],3,[],AnotherChars), 
+		getSochetaniyaPoK([0,1,2,3,4],2,[],WhereA),
+		buildWord7(WhereA,AnotherChars,Word),
+		writeS(Word),nl,fail
+	)),
+	told.
+%9 Дано множество {a,b,c,d,e,f}. Построить все слова длины 5, в которых ровно одна буква повторяется 2 раза, остальные буквы не повторяются. Вывод в файл.
+buildWord9(RepeatChars,WhereA,AnotherChars,Word):-buildWord9(RepeatChars,WhereA,AnotherChars,Word,0).
+buildWord9(RepeatChars,[],[],Word,Index):-makeEmptyList(Word),!.
+buildWord9(RepeatChars,WhereA,[AnotherCharsH|AnotherCharsT],Word,Index):-
+	Index1 is Index+1,
+	(
+		inListAndDelete(WhereA, Index,WhereA1),
+
+		buildWord9(RepeatChars,WhereA1,[AnotherCharsH|AnotherCharsT],Word1,Index1),
+		append([97],Word1,Word);
+
+		buildWord9(RepeatChars,WhereA,AnotherCharsT,Word1,Index1),
+		append([AnotherCharsH],Word1,Word)
+	),!.
+buildWord9(RepeatChars,WhereA,AnotherChar,Word,Index):-
+	Index1 is Index+1,
+	(
+		inListAndDelete(WhereA, Index,WhereA1),
+
+		buildWord9(RepeatChars,WhereA1,AnotherChar,Word1,Index1),
+		append([RepeatChars],Word1,Word);
+
+		buildWord9(RepeatChars,WhereA,[],Word1,Index1),
+		append([AnotherChar],Word1,Word)
+	),!.
+
+task9:-append([],[97,98,99,100,101,102], Mnoj),
+	tell('D:/Prolog/outputLW14/9.txt'),
+	not((
+		getRazmesheniePoK(Mnoj,1,[],RepeatChars),
+		RepeatChar is RepeatChars,
+		inListAndDelete(Mnoj,RepeatChar,Mnoj1),
+		getRazmesheniePoK(Mnoj1,3,[],AnotherChars), 
+		getSochetaniyaPoK([0,1,2,3,4],2,[],WhereA),
+		buildWord9(RepeatChar,WhereA,AnotherChars,Word),
+		writeS(Word),nl,fail
+	)),
+	told.
