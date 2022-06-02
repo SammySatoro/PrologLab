@@ -431,3 +431,70 @@ task9:-append([],[97,98,99,100,101,102], Mnoj),
 		writeS(Word),nl,fail
 	)),
 	told.
+%10 Дано множество {a,b,c,d,e,f}. Построить все слова длины 6, в которых ровно 2 буквы повторяются 2 раза, остальные буквы не повторяются. Вывод в файл.
+getElemByIndex(L,I,El):-getElemByIndex(L,I,El,0).
+getElemByIndex([H|_],K,H,K):-!.
+getElemByIndex([_|Tail],I,El,Cou):- I =:= Cou,getElemByIndex(Tail,Cou,El,Cou);Cou1 is Cou + 1, getElemByIndex(Tail,I,El,Cou1).
+
+buildWord10(RepeatChars,WhereA,WhereB,AnotherChars,Word):-buildWord10(RepeatChars,WhereA,WhereB,AnotherChars,Word,0).
+buildWord10(RepeatChars,[],[],[],Word,Index):-makeEmptyList(Word),!.
+buildWord10(RepeatChars,WhereA,WhereB,[AnotherCharsH|AnotherCharsT],Word,Index):-
+	Index1 is Index+1,
+	(
+		inListAndDelete(WhereA, Index,WhereA1),
+
+		buildWord10(RepeatChars,WhereA1,WhereB,[AnotherCharsH|AnotherCharsT],Word1,Index1),
+		getElemByIndex(RepeatChars,0,Elem),
+		append([Elem],Word1,Word);
+
+		(
+			inListAndDelete(WhereB, Index,WhereB1),
+			
+			buildWord10(RepeatChars,WhereA,WhereB1,[AnotherCharsH|AnotherCharsT],Word1,Index1),
+			getElemByIndex(RepeatChars,1,Elem),
+			append([Elem],Word1,Word);
+			
+			buildWord10(RepeatChars,WhereA,WhereB,AnotherCharsT,Word1,Index1),
+			append([AnotherCharsH],Word1,Word)
+		)
+	),!.
+buildWord10(RepeatChars,WhereA,WhereB,AnotherChar,Word,Index):-
+	Index1 is Index+1,
+	(
+		inListAndDelete(WhereA, Index,WhereA1),
+
+		buildWord10(RepeatChars,WhereA1,WhereB,AnotherChar,Word1,Index1),
+		getElemByIndex(RepeatChars,0,Elem),
+		append([Elem],Word1,Word);
+
+		(
+			inListAndDelete(WhereB, Index,WhereB1),
+			
+			buildWord10(RepeatChars,WhereA,WhereB1,AnotherChar,Word1,Index1),
+			getElemByIndex(RepeatChars,1,Elem),
+			append([Elem],Word1,Word);
+			
+			buildWord10(RepeatChars,WhereA,WhereB,[],Word1,Index1),
+			append(AnotherChar,Word1,Word)
+		)
+	),!.
+
+inListAndDeleteList(Mnoj,[],Mnoj).
+inListAndDeleteList(Mnoj,[RepeatCharsH|RepeatCharsT],Final):-
+	inListAndDelete(Mnoj,RepeatCharsH,Mnoj1),
+	inListAndDeleteList(Mnoj1,RepeatCharsT,Final),!.
+
+task10:-append([],[97,98,99,100,101,102], Mnoj),
+	append([],[0,1,2,3,4,5], Indexs),
+	tell('D:/Prolog/outputLW14/10.txt'),
+	not((
+		getRazmesheniePoK(Mnoj,2,[],RepeatChars),
+		inListAndDeleteList(Mnoj,RepeatChars,Mnoj1),
+		getRazmesheniePoK(Mnoj1,2,[],AnotherChars), 
+		getSochetaniyaPoK(Indexs,2,[],WhereA),
+		inListAndDeleteList(Indexs,WhereA,Indexs1),
+		getSochetaniyaPoK(Indexs1,2,[],WhereB),
+		buildWord10(RepeatChars,WhereA,WhereB,AnotherChars,Word),
+		writeS(Word),nl,fail
+	)),
+	told.
